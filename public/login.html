@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome! You're Connected</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.lifestyleasia.com/wp-content/uploads/sites/7/2024/10/21143213/Untitled-design-69-1600x900.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      padding: 50px 45px;
+      border-radius: 20px;
+      text-align: center;
+      color: #333;
+      width: 420px;
+      max-width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+        padding: 40px 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+        padding: 35px 20px;
+      }
+    }
+    
+    .header {
+      margin-bottom: 35px;
+    }
+    
+    .header h1 {
+      margin: 0 0 5px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.2;
+    }
+    
+    .header h2 {
+      margin: 0 0 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.2;
+    }
+    
+    .header p {
+      margin: 0;
+      font-size: 13px;
+      color: #999;
+      font-weight: 400;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e67e22;
+      margin: 25px 0 20px 0;
+      text-align: center;
+    }
+    
+    .input-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #666;
+      font-size: 13px;
+    }
+    
+    input[type="email"],
+    input[type="text"],
+    select {
+      padding: 14px 16px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      color: #333;
+      box-sizing: border-box;
+    }
+    
+    input[type="email"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #4a90e2;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+    
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    
+    .role-section {
+      margin: 25px 0;
+      text-align: left;
+    }
+    
+    button {
+      margin-top: 25px;
+      background: #4a90e2;
+      color: white;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 25px;
+      width: auto;
+      min-width: 140px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    }
+    
+    button:hover:not(:disabled) {
+      background: #3a7bc8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    
+    .message {
+      margin-top: 20px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Welcome!</h1>
+      <h2>You're Connected</h2>
+      <p>Please tell us a bit about yourself</p>
+    </div>
+    
+    <div class="section-title">We'd love a know more about you</div>
+    
+    <div class="input-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="" required>
+    </div>
+    
+    <div class="input-group">
+      <label for="questions">Questions:</label>
+      <input type="text" id="questions" placeholder="">
+    </div>
+    
+    <div class="input-group role-section">
+      <label for="role">Are you a:</label>
+      <select id="role">
+        <option value="">Select an option</option>
+        <option value="Solopreneur">Solopreneur</option>
+        <option value="Startup Founder">Startup Founder</option>
+        <option value="Established Business Owner">Established Business Owner</option>
+        <option value="Educator">Educator</option>
+        <option value="Student">Student</option>
+        <option value="Investor">Investor</option>
+        <option value="Employee">Employee</option>
+      </select>
+    </div>
+    
+    <button onclick="login()" id="login-btn">Submit</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // API endpoint - will use relative path for Railway deployment
+    const API_BASE = window.location.origin;
+    
+    // MikroTik hotspot credentials
+    const HOTSPOT_USER = "user";
+    const HOTSPOT_PASS = "user";
+    const FINAL_REDIRECT = "https://nuanu.com/";
+
+    const emailInput = document.getElementById("email");
+    const questionsInput = document.getElementById("questions");
+    const roleSelect = document.getElementById("role");
+    const loginBtn = document.getElementById("login-btn");
+
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    async function login() {
+      const email = emailInput.value.trim();
+      const questions = questionsInput.value.trim();
+      const role = roleSelect.value;
+      const msg = document.getElementById("message");
+
+      if (!emailRegex.test(email)) {
+        msg.textContent = "Please enter a valid email.";
+        msg.style.color = "#dc3545";
+        return;
+      }
+
+      // Disable button to prevent double submission
+      loginBtn.disabled = true;
+      msg.textContent = "Saving your information...";
+      msg.style.color = "#4a90e2";
+
+      // Save form data to backend
+      try {
+        const response = await fetch(`${API_BASE}/api/save-user`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            email: email,
+            questions: questions,
+            role: role
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+          console.error("Failed to save form data:", data.message);
+          msg.textContent = "Warning: Could not save data, but connecting anyway...";
+          msg.style.color = "#ff9800";
+        } else {
+          console.log("✅ User data saved successfully");
+          msg.textContent = "Connecting to WiFi...";
+          msg.style.color = "#28a745";
+        }
+      } catch (error) {
+        console.error("Error saving form data:", error);
+        msg.textContent = "Warning: Could not save data, but connecting anyway...";
+        msg.style.color = "#ff9800";
+      }
+
+      // Use MikroTik hotspot variables for login
+      setTimeout(() => {
+        window.location.href =
+          "$(link-login-only)?username=" + HOTSPOT_USER +
+          "&password=" + HOTSPOT_PASS +
+          "&dst=" + encodeURIComponent(FINAL_REDIRECT);
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

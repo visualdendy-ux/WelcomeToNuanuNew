@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUANU WiFi - Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      color: #7f8c8d;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+      color: #2c3e50;
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .stat-card.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-card.primary h3,
+    .stat-card.primary .value {
+      color: white;
+    }
+
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    thead th {
+      color: white;
+      padding: 20px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #ecf0f1;
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    tbody td {
+      padding: 18px 20px;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-solopreneur { background: #e3f2fd; color: #1976d2; }
+    .badge-startup { background: #f3e5f5; color: #7b1fa2; }
+    .badge-business { background: #e8f5e9; color: #388e3c; }
+    .badge-educator { background: #fff3e0; color: #f57c00; }
+    .badge-student { background: #fce4ec; color: #c2185b; }
+    .badge-investor { background: #e0f2f1; color: #00796b; }
+    .badge-employee { background: #f1f8e9; color: #689f38; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #7f8c8d;
+    }
+
+    .empty-state svg {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .role-stats {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .role-stats h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .role-bar {
+      margin-bottom: 15px;
+    }
+
+    .role-bar-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .role-bar-label {
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .role-bar-count {
+      color: #7f8c8d;
+    }
+
+    .role-bar-fill {
+      height: 10px;
+      background: #ecf0f1;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .role-bar-progress {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      thead th,
+      tbody td {
+        padding: 12px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 NUANU WiFi Admin Dashboard</h1>
+      <p>Monitor and manage WiFi user registrations</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <h3>Total Users</h3>
+        <div class="value" id="total-users">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>Last 24 Hours</h3>
+        <div class="value" id="recent-users">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>Most Common Role</h3>
+        <div class="value" id="top-role" style="font-size: 20px;">-</div>
+      </div>
+    </div>
+
+    <div class="role-stats" id="role-stats-container" style="display: none;">
+      <h3>Users by Role</h3>
+      <div id="role-stats"></div>
+    </div>
+
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="search" placeholder="🔍 Search by email, role, or questions...">
+      </div>
+      <button class="btn btn-primary" onclick="loadData()">🔄 Refresh</button>
+      <button class="btn btn-primary" onclick="exportData()">📥 Export CSV</button>
+    </div>
+
+    <div class="table-container">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading data...</p>
+      </div>
+      <div id="table-content" style="display: none;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Questions</th>
+              <th>Role</th>
+              <th>IP Address</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table">
+          </tbody>
+        </table>
+      </div>
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        </svg>
+        <h3>No users yet</h3>
+        <p>User registrations will appear here</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+    let allUsers = [];
+
+    // Load data on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      loadStats();
+    });
+
+    // Search functionality
+    document.getElementById('search').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filteredUsers = allUsers.filter(user => 
+        user.email.toLowerCase().includes(searchTerm) ||
+        (user.questions && user.questions.toLowerCase().includes(searchTerm)) ||
+        (user.role && user.role.toLowerCase().includes(searchTerm))
+      );
+      renderTable(filteredUsers);
+    });
+
+    async function loadData() {
+      const loading = document.getElementById('loading');
+      const tableContent = document.getElementById('table-content');
+      const emptyState = document.getElementById('empty-state');
+
+      loading.style.display = 'block';
+      tableContent.style.display = 'none';
+      emptyState.style.display = 'none';
+
+      try {
+        const response = await fetch(`${API_BASE}/api/users`);
+        const data = await response.json();
+
+        if (data.success) {
+          allUsers = data.data;
+          
+          if (allUsers.length === 0) {
+            loading.style.display = 'none';
+            emptyState.style.display = 'block';
+          } else {
+            renderTable(allUsers);
+            loading.style.display = 'none';
+            tableContent.style.display = 'block';
+          }
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        loading.innerHTML = '<p style="color: #e74c3c;">❌ Error loading data. Please refresh.</p>';
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_BASE}/api/stats`);
+        const data = await response.json();
+
+        if (data.success) {
+          document.getElementById('total-users').textContent = data.stats.total;
+          document.getElementById('recent-users').textContent = data.stats.last24hours;
+          
+          if (data.stats.byRole.length > 0) {
+            const topRole = data.stats.byRole[0];
+            document.getElementById('top-role').textContent = topRole.role || 'N/A';
+            renderRoleStats(data.stats.byRole, data.stats.total);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    function renderRoleStats(roleData, total) {
+      const container = document.getElementById('role-stats');
+      const statsContainer = document.getElementById('role-stats-container');
+      
+      if (roleData.length === 0) {
+        statsContainer.style.display = 'none';
+        return;
+      }
+
+      statsContainer.style.display = 'block';
+      container.innerHTML = '';
+
+      roleData.forEach(item => {
+        const percentage = (item.count / total * 100).toFixed(1);
+        const barHTML = `
+          <div class="role-bar">
+            <div class="role-bar-header">
+              <span class="role-bar-label">${item.role}</span>
+              <span class="role-bar-count">${item.count} (${percentage}%)</span>
+            </div>
+            <div class="role-bar-fill">
+              <div class="role-bar-progress" style="width: ${percentage}%"></div>
+            </div>
+          </div>
+        `;
+        container.innerHTML += barHTML;
+      });
+    }
+
+    function renderTable(users) {
+      const tbody = document.getElementById('users-table');
+      tbody.innerHTML = '';
+
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        const date = new Date(user.created_at).toLocaleString();
+        const roleBadge = user.role ? getRoleBadge(user.role) : '-';
+        
+        row.innerHTML = `
+          <td>${user.id}</td>
+          <td><strong>${user.email}</strong></td>
+          <td>${user.questions || '-'}</td>
+          <td>${roleBadge}</td>
+          <td>${user.ip_address || '-'}</td>
+          <td>${date}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function getRoleBadge(role) {
+      const roleClass = role.toLowerCase().replace(/\s+/g, '-');
+      let badgeClass = 'badge';
+      
+      if (role.includes('Solopreneur')) badgeClass += ' badge-solopreneur';
+      else if (role.includes('Startup')) badgeClass += ' badge-startup';
+      else if (role.includes('Business')) badgeClass += ' badge-business';
+      else if (role.includes('Educator')) badgeClass += ' badge-educator';
+      else if (role.includes('Student')) badgeClass += ' badge-student';
+      else if (role.includes('Investor')) badgeClass += ' badge-investor';
+      else if (role.includes('Employee')) badgeClass += ' badge-employee';
+      
+      return `<span class="${badgeClass}">${role}</span>`;
+    }
+
+    async function deleteUser(id) {
+      if (!confirm('Are you sure you want to delete this user?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/users/${id}`, {
+          method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('✅ User deleted successfully');
+          loadData();
+          loadStats();
+        } else {
+          alert('❌ Failed to delete user');
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('❌ Error deleting user');
+      }
+    }
+
+    function exportData() {
+      if (allUsers.length === 0) {
+        alert('No data to export');
+        return;
+      }
+
+      const headers = ['ID', 'Email', 'Questions', 'Role', 'IP Address', 'Date'];
+      const csvContent = [
+        headers.join(','),
+        ...allUsers.map(user => [
+          user.id,
+          `"${user.email}"`,
+          `"${user.questions || ''}"`,
+          `"${user.role || ''}"`,
+          user.ip_address || '',
+          new Date(user.created_at).toISOString()
+        ].join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nuanu-wifi-users-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
