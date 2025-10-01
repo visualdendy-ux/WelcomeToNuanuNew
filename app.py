@@ -64,7 +64,7 @@ def get_connection():
 DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "Bali0361")
 
 # ==== URL Aplikasi ====
-BASE_URL = os.getenv("BASE_URL", "https://save-email-mikrotik-production.up.railway.app")
+BASE_URL = os.getenv("BASE_URL", "http://167.71.206.110")
 
 # ==== Mikrotik Hotspot ====
 GATEWAY_IP = os.getenv("GATEWAY_IP", "172.19.20.1")
